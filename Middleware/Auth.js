@@ -13,13 +13,14 @@ const authentication = async function (req, res, next) {
     if (token.length != 183) return res.status(400).send({status:false,msg:"Token is not Valid"})
     let token1 = token.split(" ").pop()
     
+    
     jwt.verify(token1, "MedPlus",  function (err, decoded) {
         if (err) { return res.status(400).send({ status: false, meessage: "Token Expired" }) }
         else {
             if (Date.now() > decoded.exp * 1000) {
                 return res.status(401).send({ status: false, msg: "Session Expired", });
             }   
-            veryfyUser = decoded.userId;            
+            verifyUser = decoded.userId;            
         next();
       }
     });
