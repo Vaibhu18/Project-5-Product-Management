@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 const updateFiles = require('../aws/aws')
 
-const { isValidName, isValid, isValidEmail, isValidImageType, isValidAddress, isValidPhone, isValidPassword, isValidPinCode } = require("../validators/validation");
+const { isValidName, isValid, isValidEmail, isValidImageType, isValidAddress, isValidBody, isValidPhone, isValidPassword, isValidPinCode } = require("../validators/validation");
 const { update } = require("../models/userModel");
 
 const createUser = async function (req, res) {
@@ -15,7 +15,6 @@ const createUser = async function (req, res) {
 
         let file = req.files
 
-
         if (!file || file.length == 0) {
             return res.status(400).send({ status: false, message: "Image File must be require, Please Provide it" });
         }
@@ -23,8 +22,6 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Please Provide Valid Image Files in Format of [ jpg , jpge ,png ]" })
 
         data.profileImage = await updateFiles.uploadFile(req.files[0])
-
-
 
         if (!isValid(data.fname))
             return res.status(400).send({ status: false, msg: "The First Name Attributes must be required" })
@@ -77,6 +74,13 @@ const createUser = async function (req, res) {
 
         let shipping = data.address.shipping
         let billing = data.address.billing
+
+        if (!shipping) {
+            return res.status(400).send({ status: false, msg: "Shipping address required with details [ex- Street, City, Pincode]" })
+        }
+        if (!billing) {
+            return res.status(400).send({ status: false, msg: "Billing address required with details [ex- Street, City, Pincode]" })
+        }
 
         if (!shipping.street) return res.status(400).send({ status: false, msg: "shipping street is missing" })
         if (!shipping.city) return res.status(400).send({ status: false, msg: "shipping city is missing" })
@@ -200,17 +204,21 @@ const updateUser = async function (req, res) {
         let { fname, lname, password, address } = data
 
 
-//------------------------Authorization-------------------------//
+        //------------------------Authorization-------------------------//
 
         if (verifyUser != userId) {
             return res.status(400).send({ status: false, msg: "You are not authorised" })
-        } 
-        
+        }
 
         if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).send({ status: false, msg: "provided userId is not valid" })
 
         var productDoc = await userModel.findOne({ _id: userId })
         if (!productDoc) { return res.status(404).send({ status: false, msg: "no such product available" }) }
+
+        //         console.log(data.length)
+        // if(data.length == 0){
+        //     return res.status(400).send({status:false,msg:"Data must be required for Update User"})
+        // }
 
         if (files.length > 0) {
             if (!isValidImageType(files[0].mimetype))

@@ -4,6 +4,16 @@ const isValid = (value) => {
     return true
 }
 
+function isValidBody(data) {
+    
+    let omi = Object.keys(data).length
+ 
+
+    if (omi== 0)
+      return false
+    else return true
+  }
+
 const isValidImageType = function (data) {
     const reg = /image\/png|image\/jpeg|image\/jpg/;
     return reg.test(data)
@@ -81,5 +91,5 @@ module.exports = {
     isValid, isValidImageType, isValidName, isValidEmail, isValidPhone,
     isValidPassword, isValidAddress, isValidPinCode, isValidTitle, isValidDescription, 
     isValidSizes, isValidInstallment, isValidQuantity,
-    isValidPrice,
+    isValidPrice, isValidBody
 }
