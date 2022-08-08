@@ -87,9 +87,9 @@ const getProduct = async function (req, res) {
         var { name, size, priceGreaterThan, priceLessThan, Sorting } = querydata
         let obj = { isDeleted: false };
 
-        if (Object.keys(querydata).length == 0) {
-            return res.status(400).send({ status: false, msg: "Body cant be empty" })
-        }
+        // if (Object.keys(querydata).length == 0) {
+        //     return res.status(400).send({ status: false, msg: "Body cant be empty" })
+        // }
 
 
         if ("name" in querydata) {
@@ -105,7 +105,6 @@ const getProduct = async function (req, res) {
         if ("size" in querydata) {
 
             if (size.length != 0) {
-                console.log(size.length)
                 let newSize = size.split(",")
                 for (i = 0; i < newSize.length; i++) {
                     if (!["S", "XS", "M", "X", "L", "XXL", "XL"].includes(newSize[i].trim())) { return res.status(400).send({ status: false, msg: `please provide valid Size in between [ S , XS , M , X , L , XXL , XL ]` }) }
@@ -173,6 +172,7 @@ const updateProduct = async function (req, res) {
         let { title, description, price, isFreeShipping, style, availableSizes, installments } = data
 
 
+        
         if (!mongoose.Types.ObjectId.isValid(productId)) return res.status(400).send({ status: false, msg: "provided productId is not valid" })
 
         let productDoc = await productModel.findOne({ _id: productId, isDeleted: false })
@@ -261,7 +261,7 @@ const DeleteProduct = async function (req, res) {
         if (!mongoose.Types.ObjectId.isValid(productId)) return res.status(400).send({ status: false, msg: "provided productId is not valid" })
 
         let checkProduct = await productModel.findOne({ _id: productId, isDeleted: false })
-        if (!checkProduct) return res.status(404).send({ status: false, message: "No Such Book Found" })
+        if (!checkProduct) return res.status(404).send({ status: false, message: "No Such Product Found" })
 
 
         deletedTime = new Date().toISOString();
@@ -269,7 +269,7 @@ const DeleteProduct = async function (req, res) {
         let deletedProduct = await productModel.findByIdAndUpdate({ _id: productId }, { isDeleted: true, deletedAt: deletedTime }, { new: true, })
 
 
-        res.status(200).send({ status: true, message: "Book Deleted Successfully", data: deletedProduct })
+        res.status(200).send({ status: true, message: "Product Deleted Successfully", data: deletedProduct })
     }
     catch (err) {
         console.log(err)

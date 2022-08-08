@@ -215,7 +215,7 @@ const updateUser = async function (req, res) {
         var productDoc = await userModel.findOne({ _id: userId })
         if (!productDoc) { return res.status(404).send({ status: false, msg: "no such product available" }) }
 
-        //         console.log(data.length)
+        
         // if(data.length == 0){
         //     return res.status(400).send({status:false,msg:"Data must be required for Update User"})
         // }
@@ -312,8 +312,6 @@ const updateUser = async function (req, res) {
             productDoc.address = findAddress.address;
 
         }
-
-
         productDoc.save()
         return res.status(200).send({ status: false, msg: "success", data: productDoc })
 

@@ -6,10 +6,8 @@ const isValid = (value) => {
 
 function isValidBody(data) {
     
-    let omi = Object.keys(data).length
- 
-
-    if (omi== 0)
+    let body = Object.keys(data).length
+    if (body== 0)
       return false
     else return true
   }

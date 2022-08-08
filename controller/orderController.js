@@ -10,19 +10,12 @@ const createOrder = async function (req, res) {
 
         let { cartId, status, cancellable } = requestBody;
 
-        // if(requestBody.hasOwnProperty('cancellable')){
-        //     if ((typeof cancellable !== "boolean")) {
-        //         return res.status(400).send({ status: false, message: "cancellable should be a boolean value" });
-        //     }
-        // }
-
         if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).send({ status: false, msg: "provided userId is not valid" })
 
+        if (verifyUser != userId) {
+            return res.status(400).send({ status: false, msg: "You are not authorised" })
+        }
       
-        // if (!isValidRequestBody(requestBody)) {
-        //     return res.status(400).send({ status: false, message: "Invalid request body. Please provide the the input to proceed." });
-        // }
-
         if (!cartId) {
             return res.status(400).send({ status: false, message: `Cart Id is required` });
         }
@@ -96,6 +89,10 @@ const updateOrder = async function (req,res){
         let data = req.body
         
         let {orderId , status} = data
+
+        if (verifyUser != userId) {
+            return res.status(400).send({ status: false, msg: "You are not authorised" })
+        }
 
         let checkdata = await orderModel.findOne({_id:orderId, isDeleted: false})
         if(!checkdata){
