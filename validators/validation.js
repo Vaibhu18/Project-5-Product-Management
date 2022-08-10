@@ -66,7 +66,7 @@ const isValidSizes = function (size) {
 
 
 const isValidPrice = function (data) {
-    if ((/^[1-9][0-9]{2,5}\.[0-9]{2}|^[1-9][0-9]{2,5}$/).test(data)) {
+    if ((/^[1-9][0-9]{2,5}\.[0-9]{2}|^[1-9][0-9]{0,5}$/).test(data)) {
         return true
     }
     return false

@@ -11,7 +11,7 @@ const createCart = async function (req, res) {
         const userId = req.params.userId;
 
         const data = req.body;
-        let { quantity, productId, cartId } = data
+        let { quantity, productId } = data
 
         if (verifyUser != userId) {
             return res.status(400).send({ status: false, msg: "You are not authorised" })
@@ -24,14 +24,12 @@ const createCart = async function (req, res) {
             });
         }
 
-
         if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).send({ status: false, msg: "provided userId is not valid" })
 
         const finduser = await userModel.findById({ _id: userId })
         if (!finduser) {
             return res.status(400).send({ status: false, message: `user doesn't exist by ${userId}` })
         }
-
 
         if (!mongoose.Types.ObjectId.isValid(productId)) return res.status(400).send({ status: false, msg: "provided productId is not valid" })
 
@@ -40,7 +38,6 @@ const createCart = async function (req, res) {
             return res.status(400).send({ status: false, message: `productId doesn't exist by ${productId}` })
         }
 
-
         if (!quantity) {
             quantity = 1;
         } else {
@@ -48,7 +45,6 @@ const createCart = async function (req, res) {
                 return res.status(400).send({ status: false, message: "Please provide valid quantity & it must be greater than zero." });
             }
         }
-
 
         const findCartOfUser = await cartModel.findOne({ userId: userId, isDeleted: false });
 

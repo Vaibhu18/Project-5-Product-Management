@@ -11,14 +11,14 @@ const {authentication} = require("../Middleware/Auth")
 //-------------------------------------User Api's-------------------------------------
 
 router.post("/register",userController.createUser)
-router.post("/loginUser",userController.loginUser)
+router.post("/login",userController.loginUser)
 router.get("/user/:userId/profile",authentication,userController.getUser)
 router.put("/user/:userId/profile",authentication,userController.updateUser)
 
 //-------------------------------------Product Api's-------------------------------------
 
-router.post("/Product",productController.createProduct)
-router.get("/Product",productController.getProduct)
+router.post("/Products",productController.createProduct)
+router.get("/Products",productController.getProduct)
 router.get("/products/:productId",productController.getProductById)
 router.put("/products/:productId",productController.updateProduct)
 router.delete("/products/:productId",productController.DeleteProduct)
