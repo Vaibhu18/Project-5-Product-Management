@@ -281,7 +281,7 @@ const updateUser = async function (req, res) {
 
             const saltRounds = 10;
             productDoc.password = bcrypt.hashSync(password, saltRounds)
-        }
+        } 
 
         if (files.length > 0) {
             mimetype = files[0].mimetype.split("/")
